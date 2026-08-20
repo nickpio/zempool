@@ -37,13 +37,13 @@ describe('Mempool Backend Config', () => {
         EXTERNAL_ASSETS: [],
         EXTERNAL_MAX_RETRY: 1,
         EXTERNAL_RETRY_INTERVAL: 0,
-        USER_AGENT: 'mempool',
+        USER_AGENT: 'zempool',
         STDOUT_LOG_MIN_PRIORITY: 'debug',
         POOLS_JSON_TREE_URL: 'https://api.github.com/repos/mempool/mining-pools/git/trees/master',
         POOLS_JSON_URL: 'https://raw.githubusercontent.com/mempool/mining-pools/master/pools-v2.json',
         POOLS_UPDATE_DELAY: 604800,
         AUDIT: false,
-        RUST_GBT: true,
+        RUST_GBT: false,
         LIMIT_GBT: false,
         CLUSTER_MEMPOOL: false,
         CLUSTER_MEMPOOL_INDEXING: false,
@@ -71,23 +71,23 @@ describe('Mempool Backend Config', () => {
 
       expect(config.CORE_RPC).toStrictEqual({
         HOST: '127.0.0.1',
-        PORT: 8332,
+        PORT: 8232,
         USERNAME: 'mempool',
         PASSWORD: 'mempool',
         TIMEOUT: 60000,
         COOKIE: false,
-        COOKIE_PATH: '/bitcoin/.cookie',
+        COOKIE_PATH: '/home/user/.cache/zakura/.cookie',
         DEBUG_LOG_PATH: '',
       });
 
       expect(config.SECOND_CORE_RPC).toStrictEqual({
         HOST: '127.0.0.1',
-        PORT: 8332,
+        PORT: 8232,
         USERNAME: 'mempool',
         PASSWORD: 'mempool',
         TIMEOUT: 60000,
         COOKIE: false,
-        COOKIE_PATH: '/bitcoin/.cookie'
+        COOKIE_PATH: '/home/user/.cache/zebra/.cookie'
       });
 
       expect(config.DATABASE).toStrictEqual({
@@ -157,7 +157,7 @@ describe('Mempool Backend Config', () => {
       });
 
       expect(config.FIAT_PRICE).toStrictEqual({
-        ENABLED: true,
+        ENABLED: false,
         PAID: false,
         API_KEY: '',
       });

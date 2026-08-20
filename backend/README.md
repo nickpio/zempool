@@ -1,10 +1,6 @@
-# Mempool Backend
+# Zempool backend
 
-These instructions are mostly intended for developers. 
-
-If you choose to use these instructions for a production setup, be aware that you will still probably need to do additional configuration for your specific OS, environment, use-case, etc. We do our best here to provide a good starting point, but only proceed if you know what you're doing. Mempool only provides support for custom setups to project sponsors through [Mempool Enterprise®](https://mempool.space/enterprise).
-
-See other ways to set up Mempool on [the main README](/../../#installation-methods).
+These instructions are for developers. Production deploys still need OS-specific work. See the [main README](../README.md) for Docker.
 
 Jump to a section in this doc:
 - [Set Up the Backend](#setup)
@@ -12,42 +8,36 @@ Jump to a section in this doc:
 
 ## Setup
 
-### 1. Clone Mempool Repository
-
-Get the latest Mempool code:
+### 1. Clone the repository
 
 ```
-git clone https://github.com/mempool/mempool
-cd mempool
+git clone https://github.com/nickpio/zempool
+cd zempool
 ```
 
-Check out the latest release:
+### 2. Configure Zebra or Zakura
+
+Zempool reads JSON-RPC from a Zcash full node. Use native `zebrad` or `zakurad`. Do not use zcashd or Zakura's zcashd-compat sidecar.
+
+Enable RPC, leave prune off, and keep a full (archive) chain. Mainnet RPC is 8232. Testnet is 18232.
+
+Cookie files:
 
 ```
-latestrelease=$(curl -s https://api.github.com/repos/mempool/mempool/releases/latest|grep tag_name|head -1|cut -d '"' -f4)
-git checkout $latestrelease
+# Zakura
+~/.cache/zakura/.cookie
+
+# Zebra
+~/.cache/zebra/.cookie
 ```
 
-### 2. Configure Bitcoin Core
+Copy `mempool-config.sample.json` to `mempool-config.json` and point `CORE_RPC` at that cookie (or at username/password if you configured those instead). Set `MEMPOOL.BACKEND` to `"none"`.
 
-Turn on `txindex`, enable RPC, and set RPC credentials in `bitcoin.conf`:
+Address history needs the node's insight-style address RPCs. Without them, tx and block pages still work.
 
-```
-txindex=1
-server=1
-rpcuser=mempool
-rpcpassword=mempool
-```
+### 3. Configure MariaDB
 
-### 3. Configure Electrum Server
-
-[Pick an Electrum Server implementation](https://mempool.space/docs/faq#address-lookup-issues), configure it, and make sure it's synced.
-
-**This step is optional.** You can run Mempool without configuring an Electrum Server for it, but address lookups will be disabled.
-
-### 4. Configure MariaDB
-
-_Mempool needs MariaDB v10.5 or later. If you already have MySQL installed, make sure to migrate any existing databases **before** installing MariaDB._
+_Zempool needs MariaDB v10.5 or later. If you already have MySQL installed, migrate any existing databases **before** installing MariaDB._
 
 Get MariaDB from your operating system's package manager:
 
@@ -73,7 +63,7 @@ MariaDB [(none)]> grant all privileges on mempool.* to 'mempool'@'%' identified 
 Query OK, 0 rows affected (0.00 sec)
 ```
 
-### 5. Prepare Mempool Backend
+### 4. Prepare Zempool backend
 
 #### Build
 
@@ -106,9 +96,9 @@ In particular, make sure:
   - "esplora" if you're using [mempool/electrs](https://github.com/mempool/electrs)
   - "none" if you're not using any Electrum Server
 
-### 6. Run Mempool Backend
+### 5. Run Zempool backend
 
-Run the Mempool backend:
+Run the backend:
 
 ```
 npm run start
@@ -142,14 +132,14 @@ Mempool updated in 0.243 seconds
 Updating mempool
 ```
 
-### 7. Set Up Mempool Frontend
-With the backend configured and running, proceed to set up the [Mempool frontend](../frontend#manual-setup).
+### 6. Set up the frontend
+With the backend running, set up the [frontend](../frontend#manual-setup).
 
 ## Development Tips
 
 ### Set Up Backend Watchers
 
-The Mempool backend is static. TypeScript scripts are compiled into the `dist` folder and served through a Node.js web server. 
+The backend compiles TypeScript into `dist` and serves it with Node.js. 
 
 As a result, for development purposes, you may find it helpful to set up backend watchers to avoid the manual shutdown/recompile/restart command-line cycle.
 

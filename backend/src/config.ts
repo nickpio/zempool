@@ -200,7 +200,7 @@ const defaults: IConfig = {
     'EXTERNAL_ASSETS': [],
     'EXTERNAL_MAX_RETRY': 1,
     'EXTERNAL_RETRY_INTERVAL': 0,
-    'USER_AGENT': 'mempool',
+    'USER_AGENT': 'zempool',
     'STDOUT_LOG_MIN_PRIORITY': 'debug',
     'AUTOMATIC_POOLS_UPDATE': false,
     'POOLS_JSON_URL': 'https://raw.githubusercontent.com/mempool/mining-pools/master/pools-v2.json',
@@ -209,7 +209,7 @@ const defaults: IConfig = {
     'AUDIT': false,
     'CLUSTER_MEMPOOL': false,
     'CLUSTER_MEMPOOL_INDEXING': false,
-    'RUST_GBT': true,
+    'RUST_GBT': false,
     'LIMIT_GBT': false,
     'CPFP_INDEXING': false,
     'MAX_BLOCKS_BULK_QUERY': 0,
@@ -236,22 +236,22 @@ const defaults: IConfig = {
   },
   'CORE_RPC': {
     'HOST': '127.0.0.1',
-    'PORT': 8332,
+    'PORT': 8232,
     'USERNAME': 'mempool',
     'PASSWORD': 'mempool',
     'TIMEOUT': 60000,
     'COOKIE': false,
-    'COOKIE_PATH': '/bitcoin/.cookie',
+    'COOKIE_PATH': '/home/user/.cache/zakura/.cookie',
     'DEBUG_LOG_PATH': '',
   },
   'SECOND_CORE_RPC': {
     'HOST': '127.0.0.1',
-    'PORT': 8332,
+    'PORT': 8232,
     'USERNAME': 'mempool',
     'PASSWORD': 'mempool',
     'TIMEOUT': 60000,
     'COOKIE': false,
-    'COOKIE_PATH': '/bitcoin/.cookie'
+    'COOKIE_PATH': '/home/user/.cache/zebra/.cookie'
   },
   'DATABASE': {
     'ENABLED': true,
@@ -333,7 +333,7 @@ const defaults: IConfig = {
     'BATCH_QUERY_BASE_SIZE': 5000,
   },
   'FIAT_PRICE': {
-    'ENABLED': true,
+    'ENABLED': false,
     'PAID': false,
     'API_KEY': '',
   },

@@ -21,8 +21,9 @@ services:
   api:
     environment:
       MEMPOOL_BACKEND: "none"
+      # Host gateway: a zebrad/zakurad RPC on the Docker host. Mainnet 8232, testnet 18232.
       CORE_RPC_HOST: "172.27.0.1"
-      CORE_RPC_PORT: "8332"
+      CORE_RPC_PORT: "8232"
       CORE_RPC_USERNAME: "mempool"
       CORE_RPC_PASSWORD: "mempool"
       DATABASE_ENABLED: "true"

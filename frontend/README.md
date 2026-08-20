@@ -1,52 +1,31 @@
-# Mempool Frontend
+# Zempool frontend
 
-You can build and run the Mempool frontend and proxy to the production Mempool backend (for easier frontend development), or you can connect it to your own backend for a full Mempool development instance, custom deployment, etc.
+Build the explorer UI against a local Zempool backend. There is no production Zempool API to proxy to, and Liquid is not part of this project.
 
 Jump to a section in this doc:
-- [Quick Setup for Frontend Development](#quick-setup-for-frontend-development)
+- [Quick setup](#quick-setup)
 - [Manual Frontend Setup](#manual-setup)
 - [Translations](#translations-transifex-project)
 
-## Quick Setup for Frontend Development
+## Quick setup
 
-If you want to quickly improve the UI, fix typos, or make other updates that don't require any backend changes, you don't need to set up an entire backend—you can simply run the Mempool frontend locally and proxy to the mempool.space backend.
-
-### 1. Clone Mempool Repository
-
-Get the latest Mempool code:
+Set up the [backend](../backend/) first so the frontend has something to talk to.
 
 ```
-git clone https://github.com/mempool/mempool
-cd mempool/frontend
+git clone https://github.com/nickpio/zempool
+cd zempool/frontend
 ```
 
-### 2. Specify Website
-
-The same frontend codebase is used for https://mempool.space and https://liquid.network.
-
-Configure the frontend for the site you want by running the corresponding command:
-
-```
-$ npm run config:defaults:mempool
-$ npm run config:defaults:liquid
-```
-
-### 3. Run the Frontend
-
-_Make sure to use Node.js 20.x and npm 9.x or newer._
-
-Install project dependencies and run the frontend server:
+Use Node.js 20.x and npm 9.x or newer.
 
 ```
 $ npm install
-$ npm run serve:local-prod
+$ npm run serve
 ```
 
-The frontend will be available at http://localhost:4200/ and all API requests will be proxied to the production server at https://mempool.space.
+The frontend is at http://localhost:4200/ and proxies API calls to the local backend.
 
-### 4. Test
-
-After making your changes, you can run our end-to-end automation suite and check for possible regressions.
+### Test
 
 Headless:
 
@@ -60,13 +39,11 @@ Interactive:
 $ npm run config:defaults:mempool && npm run cypress:open
 ```
 
-This will open the Cypress test runner, where you can select any of the test files to run.
-
-If all tests are green, submit your PR, and it will be reviewed by someone on the team as soon as possible.
+Cypress fixtures are still Bitcoin-era. Expect that suite to lag the Zcash conversion.
 
 ## Manual Setup
 
-Set up the [Mempool backend](../backend/) first, if you haven't already.
+Set up the [Zempool backend](../backend/) first, if you haven't already.
 
 ### 1. Build the Frontend
 
@@ -84,7 +61,7 @@ npm run build
 
 #### Development
 
-To run your local Mempool frontend with your local Mempool backend:
+To run the local frontend against the local backend:
 
 ```
 npm run serve
@@ -98,8 +75,7 @@ You will probably want to set up a reverse proxy, TLS, etc. There are sample ngi
 
 ## Translations: Transifex Project
 
-The Mempool frontend strings are localized into 20+ locales:
-https://www.transifex.com/mempool/mempool/dashboard/
+Frontend strings are still the upstream Mempool locales (Transifex). English copy we touch will say Zempool and ZEC. Other locales will lag.
 
 ### Translators
 

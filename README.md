@@ -1,38 +1,29 @@
-# The Mempool Open Source Project® [![mempool](https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/simple/ry4br7/master&style=flat-square)](https://dashboard.cypress.io/projects/ry4br7/runs)
+# Zempool
 
-https://user-images.githubusercontent.com/93150691/226236121-375ea64f-b4a1-4cc0-8fad-a6fb33226840.mp4
+Zempool is a Zcash mempool visualizer, explorer, and API. It is a fork of [the Mempool Open Source Project](https://github.com/mempool/mempool) (AGPL-3.0), reworked to talk to a Zcash full node instead of Bitcoin Core.
 
-<br>
+It is not affiliated with mempool.space. "Mempool" is a trademark of Mempool Space. This project keeps the original copyright notices and AGPL license.
 
-Mempool is the fully-featured mempool visualizer, explorer, and API service running at [mempool.space](https://mempool.space/). 
+## What it does
 
-It is an open-source project developed and operated for the benefit of the Bitcoin community, with a focus on the emerging transaction fee market that is evolving Bitcoin into a multi-layer ecosystem.
+Zempool shows the live Zcash mempool, projected blocks, fees, and a transparent-first explorer (blocks, transactions, search). Shielded transactions appear as first-class objects. Amounts that the chain does not reveal stay hidden.
 
-# Installation Methods
+It connects to **Zebra** (`zebrad`) or **Zakura** (`zakurad`) over JSON-RPC. zcashd is not supported. Zakura's zcashd-compat sidecar is not supported either. Point Zempool at native node RPC.
 
-Mempool can be self-hosted on a wide variety of your own hardware, ranging from a simple one-click installation on a Raspberry Pi full-node distro all the way to a robust production instance on a powerful FreeBSD server. 
+Default RPC port is 8232 (testnet 18232). Cookie files live at `~/.cache/zakura/.cookie` or `~/.cache/zebra/.cookie`.
 
-Most people should use a <a href="#one-click-installation">one-click install method</a>.
+The node must be an archive / non-pruned node. A pruned Zakura snapshot is fine for a wallet, not for an explorer.
 
-Other install methods are meant for developers and others with experience managing servers. If you want support for your own production instance of Mempool, or if you'd like to have your own instance of Mempool run by the mempool.space team on their own global ISP infrastructure—check out <a href="https://mempool.space/enterprise" target="_blank">Mempool Enterprise®</a>.
+Address history needs insight-style RPCs on the node (`getaddressbalance` / `getaddressdeltas`). Without those, search still decodes addresses, but the address page has no history.
 
-<a id="one-click-installation"></a>
-## One-Click Installation
+## Install
 
-Mempool can be conveniently installed on the following full-node distros: 
-- [Umbrel](https://github.com/getumbrel/umbrel)
-- [RaspiBlitz](https://github.com/rootzoll/raspiblitz)
-- [RoninDojo](https://code.samourai.io/ronindojo/RoninDojo)
-- [myNode](https://github.com/mynodebtc/mynode)
-- [StartOS](https://github.com/Start9Labs/start-os)
-- [nix-bitcoin](https://github.com/fort-nix/nix-bitcoin/blob/a1eacce6768ca4894f365af8f79be5bbd594e1c3/examples/configuration.nix#L129)
+Most people should use Docker. See [`docker/`](./docker/). You still have to run Zebra or Zakura yourself, with RPC enabled and prune off.
 
-**We highly recommend you deploy your own Mempool instance this way.** No matter which option you pick, you'll be able to get your own fully-sovereign instance of Mempool up quickly without needing to fiddle with any settings.
+Developers: [`backend/`](./backend/) and [`frontend/`](./frontend/).
 
-## Advanced Installation Methods
+Production-shaped deploys: [`production/`](./production/). Those scripts still show their Bitcoin-era layout. Treat them as a starting point, not a drop-in Zcash stack.
 
-Mempool can be installed in other ways too, but we only recommend doing so if you're a developer, have experience managing servers, or otherwise know what you're doing.
+## License
 
-- See the [`docker/`](./docker/) directory for instructions on deploying Mempool with Docker.
-- See the [`backend/`](./backend/) and [`frontend/`](./frontend/) directories for manual install instructions oriented for developers.
-- See the [`production/`](./production/) directory for guidance on setting up a more serious Mempool instance designed for high performance at scale.
+GNU Affero General Public License v3.0. See [LICENSE](./LICENSE) and [COPYING.md](./COPYING.md).

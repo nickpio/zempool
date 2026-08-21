@@ -33,6 +33,16 @@ export enum TemplateAlgorithm {
   clusterMempool = 1,
 }
 
+export interface Acceleration {
+  txid: string;
+  added?: number;
+  effectiveVsize?: number;
+  effectiveFee?: number;
+  feeDelta: number;
+  pools: number[];
+  max_bid?: number;
+}
+
 export interface BlockAudit {
   version: number,
   time: number,

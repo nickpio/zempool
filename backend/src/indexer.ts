@@ -9,7 +9,6 @@ import PricesRepository from './repositories/PricesRepository';
 import config from './config';
 import auditReplicator from './replication/AuditReplication';
 import statisticsReplicator from './replication/StatisticsReplication';
-import AccelerationRepository from './repositories/AccelerationRepository';
 import BlocksAuditsRepository from './repositories/BlocksAuditsRepository';
 import BlocksRepository from './repositories/BlocksRepository';
 
@@ -223,7 +222,6 @@ class Indexer {
       await blocks.$indexBlocksFirstSeen();
       await auditReplicator.$sync();
       await statisticsReplicator.$sync();
-      await AccelerationRepository.$indexPastAccelerations();
       await BlocksAuditsRepository.$migrateAuditsV0toV1();
       await BlocksRepository.$migrateBlocks();
 

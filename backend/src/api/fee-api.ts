@@ -3,8 +3,9 @@ import { IBitcoinApi } from './bitcoin/bitcoin-api.interface';
 import config from '../config';
 import mempool from './mempool';
 import projectedBlocks from './mempool-blocks';
+import { Common } from './common';
 
-const isLiquid = config.MEMPOOL.NETWORK === 'liquid' || config.MEMPOOL.NETWORK === 'liquidtestnet';
+const isLiquid = Common.isLiquid();
 
 interface RecommendedFees {
   fastestFee: number,

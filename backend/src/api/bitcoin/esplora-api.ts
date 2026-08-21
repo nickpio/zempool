@@ -359,7 +359,7 @@ class FailoverRouter {
   }
 
   private async $updateLiquidAudit(host: FailoverHost): Promise<void> {
-    if (config.MEMPOOL.NETWORK !== 'liquid') {
+    if (!Common.isLiquid()) {
       return;
     }
     try {
@@ -629,7 +629,7 @@ class ElectrsApi implements AbstractBitcoinApi {
         checked: !!host.checked,
         lastChecked: host.lastChecked || 0,
         hashes: host.hashes,
-        ...(config.MEMPOOL.NETWORK === 'liquid' ? { liquidAudit: host.liquidAudit } : {}),
+        ...(Common.isLiquid() ? { liquidAudit: host.liquidAudit } : {}),
       }));
     } else {
       return [];

@@ -10,7 +10,7 @@ import {
   MempoolBlockWithTransactions,
 } from '../mempool.interfaces';
 import { IEsploraApi } from './bitcoin/esplora-api.interface';
-import { Acceleration } from './services/acceleration';
+import { Acceleration } from '../mempool.interfaces';
 import { calculateGoodBlockCpfp, calculateClusterMempoolBlockCpfp, calculateFastBlockCpfp, BlockCpfpData } from './cpfp';
 import mempoolBlocks from './mempool-blocks';
 import memPool from './mempool';
@@ -19,7 +19,6 @@ import blocks from './blocks';
 import transactionUtils from './transaction-utils';
 import { ClusterMempool } from '../cluster-mempool/cluster-mempool';
 import { Common } from './common';
-import accelerationApi from './services/acceleration';
 
 interface ProcessedAudit extends AuditResult {
   expectedFees: number;
@@ -53,8 +52,7 @@ class BlockProcessor {
     accelerations: Record<string, Acceleration>
   ): Promise<BlockProcessingResult> {
     const poolAccelerations = Object.values(accelerations)
-      .filter(a => a.pools.includes(pool.uniqueId))
-      .map(a => ({ txid: a.txid, max_bid: a.feeDelta }));
+      .filter(a => a.pools.includes(pool.uniqueId));
 
     const { templateAlgorithm, cpfpSummary } = detectTemplateAlgorithm(
       block.height,
@@ -106,7 +104,7 @@ class BlockProcessor {
     accelerations: Record<string, Acceleration>
   ): Promise<ProcessedAudit> {
     const auditMempool = memPool.getMempool();
-    const isAccelerated = accelerationApi.isAcceleratedBlock(block, Object.values(accelerations));
+    const isAccelerated = false;
 
     const candidateTxs = memPool.getMempoolCandidates();
     const candidates = (memPool.limitGBT && candidateTxs)
@@ -201,7 +199,7 @@ export function saveCpfpDataToCpfpSummary(transactions: MempoolTransactionExtend
 export function detectTemplateAlgorithm(
   height: number,
   blockTransactions: MempoolTransactionExtended[],
-  poolAccelerations: { txid: string; max_bid: number }[],
+  poolAccelerations: Acceleration[],
   fast: boolean = false
 ): { templateAlgorithm: TemplateAlgorithm; cpfpSummary: CpfpSummary } {
 

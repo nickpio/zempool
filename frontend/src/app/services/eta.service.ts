@@ -5,7 +5,6 @@ import { MempoolBlock } from '@interfaces/websocket.interface';
 import { Transaction } from '@interfaces/electrs.interface';
 import { MiningService, MiningStats } from '@app/services/mining.service';
 import { getUnacceleratedFeeRate } from '@app/shared/transaction.utils';
-import { AccelerationEstimate } from '@components/accelerate-checkout/accelerate-checkout.component';
 import { Observable, combineLatest, map, of, share, shareReplay, tap } from 'rxjs';
 
 export interface ETA {
@@ -23,48 +22,6 @@ export class EtaService {
     private stateService: StateService,
     private miningService: MiningService,
   ) { }
-
-  getProjectedEtaObservable(estimate: AccelerationEstimate, miningStats?: MiningStats): Observable<{ hashratePercentage: number, ETA: number, acceleratedETA: number }> {
-    return combineLatest([
-      this.stateService.mempoolTxPosition$.pipe(map(p => p?.position)),
-      this.stateService.difficultyAdjustment$,
-      miningStats ? of(miningStats) : this.miningService.getMiningStats('1m'),
-    ]).pipe(
-      map(([mempoolPosition, da, miningStats]) => {
-        if (!mempoolPosition || !estimate?.pools?.length || !miningStats || !da) {
-          return {
-            hashratePercentage: undefined,
-            ETA: undefined,
-            acceleratedETA: undefined,
-          };
-        }
-        const pools: { [id: number]: SinglePoolStats } = {};
-        for (const pool of miningStats.pools) {
-          pools[pool.poolUniqueId] = pool;
-        }
-
-        let totalAcceleratedHashrate = 0;
-        for (const poolId of estimate.pools) {
-          const pool = pools[poolId];
-          if (!pool) {
-            continue;
-          }
-          totalAcceleratedHashrate += pool.lastEstimatedHashrate;
-        }
-        const acceleratingHashrateFraction = (totalAcceleratedHashrate / miningStats.lastEstimatedHashrate);
-
-        return {
-          hashratePercentage: acceleratingHashrateFraction * 100,
-          ETA: Date.now() + da.adjustedTimeAvg * mempoolPosition.block,
-          acceleratedETA: this.calculateETAFromShares([
-            { block: mempoolPosition.block, hashrateShare: (1 - acceleratingHashrateFraction) },
-            { block: 0, hashrateShare: acceleratingHashrateFraction },
-          ], da).time,
-        };
-      }),
-      shareReplay()
-    );
-  }
 
   mempoolPositionFromFees(feerate: number, mempoolBlocks: MempoolBlock[]): MempoolPosition {
     for (let txInBlockIndex = 0; txInBlockIndex < mempoolBlocks.length; txInBlockIndex++) {

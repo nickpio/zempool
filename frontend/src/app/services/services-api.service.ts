@@ -7,8 +7,12 @@ import { MenuGroup } from '@interfaces/services.interface';
 import { Observable, of, ReplaySubject, tap, catchError, share, filter, switchMap, map } from 'rxjs';
 import { IBackendInfo } from '@interfaces/websocket.interface';
 import { Acceleration, AccelerationHistoryParams } from '@interfaces/node-api.interface';
-import { AccelerationStats } from '@components/acceleration/acceleration-stats/acceleration-stats.component';
 import { SimpleProof } from '@components/simpleproof-widget/simpleproof-widget.component';
+
+interface AccelerationStats {
+  count?: number;
+  total?: number;
+}
 
 export interface IUser {
   username: string;

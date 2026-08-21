@@ -469,7 +469,7 @@ export class StateService {
   }
 
   networkSupportsLightning() {
-    return this.env.LIGHTNING && this.lightningNetworks.includes(this.network);
+    return false;
   }
   get networkDisplayName(): string {
     const labels: Record<string, string> = {

@@ -6,7 +6,7 @@ import config from '../config';
 import { Worker } from 'worker_threads';
 import path from 'path';
 import mempool from './mempool';
-import { Acceleration } from './services/acceleration';
+import { Acceleration } from '../mempool.interfaces';
 import PoolsRepository from '../repositories/PoolsRepository';
 import { ProjectedBlock } from '../cluster-mempool/cluster-mempool';
 
@@ -258,7 +258,7 @@ class MempoolBlocks {
     }
 
     const accelerations = useAccelerations ? mempool.getAccelerations() : {};
-    const acceleratedList = accelerationPool ? Object.values(accelerations).filter(acc => newMempool[acc.txid] && acc.pools.includes(accelerationPool)) : Object.values(accelerations).filter(acc => newMempool[acc.txid]);
+    const acceleratedList = accelerationPool ? Object.values(accelerations).filter(acc => newMempool[acc.txid] && acc.pools?.includes(accelerationPool)) : Object.values(accelerations).filter(acc => newMempool[acc.txid]);
     const convertedAccelerations = acceleratedList.map(acc => {
       this.setUid(newMempool[acc.txid], true);
       return {
@@ -320,7 +320,7 @@ class MempoolBlocks {
     const removedTxs = removed.filter(tx => tx.uid != null) as MempoolTransactionExtended[];
 
     const accelerations = useAccelerations ? mempool.getAccelerations() : {};
-    const acceleratedList = accelerationPool ? Object.values(accelerations).filter(acc => newMempool[acc.txid] && acc.pools.includes(accelerationPool)) : Object.values(accelerations).filter(acc => newMempool[acc.txid]);
+    const acceleratedList = accelerationPool ? Object.values(accelerations).filter(acc => newMempool[acc.txid] && acc.pools?.includes(accelerationPool)) : Object.values(accelerations).filter(acc => newMempool[acc.txid]);
     const convertedAccelerations = acceleratedList.map(acc => {
       this.setUid(newMempool[acc.txid], true);
       return {
@@ -485,7 +485,7 @@ class MempoolBlocks {
 
             if (txid in accelerations) {
               acceleration = accelerations[txid];
-              if (isAcceleratedBy[txid] || (acceleration && (!accelerationPool || acceleration.pools.includes(accelerationPool)))) {
+              if (isAcceleratedBy[txid] || (acceleration && (!accelerationPool || acceleration.pools?.includes(accelerationPool)))) {
                 if (!mempoolTx.acceleration) {
                   mempoolTx.cpfpDirty = true;
                 }
@@ -595,7 +595,7 @@ class MempoolBlocks {
 
           if (txid in accelerations) {
             acceleration = accelerations[txid];
-            if (isAcceleratedBy[txid] || (acceleration && (!accelerationPool || acceleration.pools.includes(accelerationPool)))) {
+            if (isAcceleratedBy[txid] || (acceleration && (!accelerationPool || acceleration.pools?.includes(accelerationPool)))) {
               if (!mempoolTx.acceleration) {
                 mempoolTx.cpfpDirty = true;
               }

@@ -9,8 +9,7 @@ import loadingIndicators from './loading-indicators';
 import bitcoinClient from './bitcoin/bitcoin-client';
 import bitcoinSecondClient from './bitcoin/bitcoin-second-client';
 import rbfCache from './rbf-cache';
-import { Acceleration } from './services/acceleration';
-import accelerationApi from './services/acceleration';
+import { Acceleration } from '../mempool.interfaces';
 import redisCache from './redis-cache';
 import blocks from './blocks';
 import { ClusterMempool } from '../cluster-mempool/cluster-mempool';
@@ -52,7 +51,7 @@ class Mempool {
   constructor() {
     // Initialize mempoolInfo here to avoid circular dependency issues
     // Use config directly instead of Common.isLiquid() to break circular dependency
-    const isLiquid = config.MEMPOOL.NETWORK === 'liquid' || config.MEMPOOL.NETWORK === 'liquidtestnet';
+    const isLiquid = Common.isLiquid();
     this.mempoolInfo = {
       loaded: false,
       size: 0,
@@ -445,14 +444,8 @@ class Mempool {
   }
 
   public updateAccelerations(newAccelerationMap: Record<string, Acceleration>): string[] {
-    try {
-      const accelerationDelta = accelerationApi.getAccelerationDelta(this.accelerations, newAccelerationMap);
-      this.accelerations = newAccelerationMap;
-      return accelerationDelta;
-    } catch (e: any) {
-      logger.debug(`Failed to update accelerations: ` + (e instanceof Error ? e.message : e));
-      return [];
-    }
+    this.accelerations = newAccelerationMap;
+    return [];
   }
 
   public getNextCandidates(minFeeTransactions: string[], blockHeight: number, deletedTransactions: MempoolTransactionExtended[]): GbtCandidates | undefined {

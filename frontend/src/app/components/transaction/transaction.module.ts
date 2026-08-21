@@ -2,14 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { TransactionComponent } from '@components/transaction/transaction.component';
-import { TransactionAccelerateComponent } from '@components/transaction/transaction-accelerate.component';
 import { TransactionDetailsComponent } from '@components/transaction/transaction-details/transaction-details.component';
 import { SharedModule } from '@app/shared/shared.module';
 import { TxBowtieModule } from '@components/tx-bowtie-graph/tx-bowtie.module';
 import { TransactionExtrasModule } from '@components/transaction/transaction-extras.module';
 import { GraphsModule } from '@app/graphs/graphs.module';
-import { AccelerateCheckout } from '@components/accelerate-checkout/accelerate-checkout.component';
-import { AccelerateFeeGraphComponent } from '@components/accelerate-checkout/accelerate-fee-graph.component';
 import { TransactionRawComponent } from '@components/transaction/transaction-raw.component';
 import { CpfpInfoComponent } from '@components/transaction/cpfp-info.component';
 import { ClusterDiagramComponent } from '@components/cluster-diagram/cluster-diagram.component';
@@ -23,13 +20,6 @@ const routes: Routes = [
   {
     path: 'preview',
     component: TransactionRawComponent,
-  },
-  {
-    path: ':id/accelerate',
-    component: TransactionAccelerateComponent,
-    data: {
-      ogImage: true
-    }
   },
   {
     path: ':id',
@@ -61,10 +51,7 @@ export class TransactionRoutingModule { }
   ],
   declarations: [
     TransactionComponent,
-    TransactionAccelerateComponent,
     TransactionDetailsComponent,
-    AccelerateCheckout,
-    AccelerateFeeGraphComponent,
     TransactionRawComponent,
     CpfpInfoComponent,
     ClusterDiagramComponent,
@@ -72,8 +59,6 @@ export class TransactionRoutingModule { }
   exports: [
     TransactionComponent,
     TransactionDetailsComponent,
-    AccelerateCheckout,
-    AccelerateFeeGraphComponent,
     CpfpInfoComponent,
     ClusterDiagramComponent,
   ]

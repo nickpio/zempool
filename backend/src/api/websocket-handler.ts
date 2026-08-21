@@ -18,8 +18,7 @@ import difficultyAdjustment from './difficulty-adjustment';
 import feeApi from './fee-api';
 import priceUpdater from '../tasks/price-updater';
 import { ApiPrice } from '../repositories/PricesRepository';
-import { Acceleration } from './services/acceleration';
-import accelerationApi from './services/acceleration';
+import { Acceleration } from '../mempool.interfaces';
 import mempool from './mempool';
 import statistics from './statistics/statistics';
 import bitcoinApi from './bitcoin/bitcoin-api-factory';
@@ -405,17 +404,6 @@ class WebsocketHandler {
             }
           }
 
-          if (parsedMessage && parsedMessage['track-accelerations'] != null) {
-            if (parsedMessage['track-accelerations']) {
-              client['track-accelerations'] = true;
-              response['accelerations'] = JSON.stringify({
-                accelerations: Object.values(memPool.getAccelerations()),
-              });
-            } else {
-              client['track-accelerations'] = false;
-            }
-          }
-
           if (parsedMessage.action === 'init') {
             if (!this.socketData['blocks']?.length || !this.socketData['da'] || !this.socketData['backendInfo'] || !this.socketData['conversions']) {
               this.updateSocketData();
@@ -551,40 +539,8 @@ class WebsocketHandler {
     }
   }
 
-  handleAccelerationsChanged(accelerations: Record<string, Acceleration>): void {
-    if (!this.webSocketServers.length) {
-      throw new Error('No WebSocket.Server has been set');
-    }
-
-    const websocketAccelerationDelta = accelerationApi.getAccelerationDelta(this.accelerations, accelerations);
-    this.accelerations = accelerations;
-
-    if (!websocketAccelerationDelta.length) {
-      return;
-    }
-
-    // pre-compute acceleration delta
-    const accelerationUpdate = {
-      added: websocketAccelerationDelta.map(txid => accelerations[txid]).filter(acc => acc != null),
-      removed: websocketAccelerationDelta.filter(txid => !accelerations[txid]),
-    };
-
-    try {
-      const response = JSON.stringify({
-        accelerations: accelerationUpdate,
-      });
-
-      for (const server of this.webSocketServers) {
-        server.clients.forEach((client) => {
-          if (client.readyState !== WebSocket.OPEN) {
-            return;
-          }
-          this.send(client, response);
-        });
-      }
-    } catch (e) {
-      logger.debug(`Error sending acceleration update to websocket clients: ${e}`);
-    }
+  handleAccelerationsChanged(_accelerations: Record<string, Acceleration>): void {
+    return;
   }
 
   handleReorg(): void {
@@ -666,7 +622,7 @@ class WebsocketHandler {
     const vBytesPerSecond = memPool.getVBytesPerSecond();
     const rbfTransactions = Common.findRbfTransactions(newTransactions, recentlyDeletedTransactions.flat());
     const da = difficultyAdjustment.getDifficultyAdjustment();
-    const accelerations = accelerationApi.getAccelerations();
+    const accelerations = memPool.getAccelerations();
     memPool.handleRbfTransactions(rbfTransactions);
     const rbfChanges = rbfCache.getRbfChanges();
     let rbfReplacements;
@@ -774,7 +730,7 @@ class WebsocketHandler {
     const addressCache = this.makeAddressCache(newTransactions);
     const removedAddressCache = this.makeAddressCache(deletedTransactions);
 
-    const websocketAccelerationDelta = accelerationApi.getAccelerationDelta(this.accelerations, accelerations);
+    const websocketAccelerationDelta: string[] = [];
     this.accelerations = accelerations;
 
     // pre-compute acceleration delta

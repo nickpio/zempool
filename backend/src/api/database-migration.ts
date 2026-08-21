@@ -569,7 +569,7 @@ class DatabaseMigration {
       await this.updateToSchemaVersion(67);
     }
 
-    if (databaseSchemaVersion < 68 && config.MEMPOOL.NETWORK === 'liquid') {
+    if (databaseSchemaVersion < 68 && Common.isLiquid()) {
       await this.$executeQuery('TRUNCATE TABLE elements_pegs');
       await this.$executeQuery('ALTER TABLE elements_pegs ADD PRIMARY KEY (txid, txindex);');
       await this.$executeQuery(`UPDATE state SET number = 0 WHERE name = 'last_elements_block';`);
@@ -593,7 +593,7 @@ class DatabaseMigration {
       await this.updateToSchemaVersion(70);
     }
 
-    if (databaseSchemaVersion < 71 && config.MEMPOOL.NETWORK === 'liquid') {
+    if (databaseSchemaVersion < 71 && Common.isLiquid()) {
       await this.$executeQuery('TRUNCATE TABLE elements_pegs');
       await this.$executeQuery('TRUNCATE TABLE federation_txos');
       await this.$executeQuery('SET FOREIGN_KEY_CHECKS = 0');
@@ -779,7 +779,7 @@ class DatabaseMigration {
     }
 
     // elements_pegs indexes
-    if (databaseSchemaVersion < 92 && config.MEMPOOL.NETWORK === 'liquid') {
+    if (databaseSchemaVersion < 92 && Common.isLiquid()) {
       await this.$executeQuery(`
         ALTER TABLE \`elements_pegs\`
           ADD INDEX \`block\` (\`block\`),
@@ -792,7 +792,7 @@ class DatabaseMigration {
     }
 
     // federation_txos indexes
-    if (databaseSchemaVersion < 93 && config.MEMPOOL.NETWORK === 'liquid') {
+    if (databaseSchemaVersion < 93 && Common.isLiquid()) {
       await this.$executeQuery(`
         ALTER TABLE \`federation_txos\`
           ADD INDEX \`unspent\` (\`unspent\`),
@@ -1074,7 +1074,7 @@ class DatabaseMigration {
         await this.$executeQuery('ALTER TABLE `blocks_audits` ADD INDEX `time` (`time`)');
       }
 
-      if (config.MEMPOOL.NETWORK !== 'liquid') {
+      if (!Common.isLiquid()) {
         // Apply all the liquid specific migrations to all other networks
         // Version 68
         await this.$executeQuery('ALTER TABLE elements_pegs ADD PRIMARY KEY (txid, txindex);');
@@ -1183,7 +1183,7 @@ class DatabaseMigration {
 
     // reindex liquid federation addresses and txos when needed, and add hardcoded federation addresses
     // (safe to make this conditional on the network since it doesn't change the database schema)
-    if (databaseSchemaVersion < 105 && config.MEMPOOL.NETWORK === 'liquid') {
+    if (databaseSchemaVersion < 105 && Common.isLiquid()) {
       // Hardcoded federation addresses
       await this.$executeQuery(`INSERT IGNORE INTO federation_addresses (bitcoinaddress) VALUES ('3G6neksSBMp51kHJ2if8SeDUrzT8iVETWT')`);
       await this.$executeQuery(`INSERT IGNORE INTO federation_addresses (bitcoinaddress) VALUES ('bc1qwnevjp8nsq7adu3hxlvdvslrf242q4vuavfg0y929jp2zntp3vgq7cq6z2')`);
@@ -1204,7 +1204,7 @@ class DatabaseMigration {
 
     // another liquid failure, fix bad timelocks on federation txos
     // (safe to make this conditional on the network since it doesn't change the database schema)
-    if (databaseSchemaVersion < 106 && config.MEMPOOL.NETWORK === 'liquid') {
+    if (databaseSchemaVersion < 106 && Common.isLiquid()) {
       // In a specific setup it's possible that 3G6neksSBMp51kHJ2if8SeDUrzT8iVETWT and bc1qwnevjp8nsq7adu3hxlvdvslrf242q4vuavfg0y929jp2zntp3vgq7cq6z2
       // were set with a timelock of 2016 instead of 4032
       // This rollbacks the tables to before bc1qwnevjp8nsq7adu3hxlvdvslrf242q4vuavfg0y929jp2zntp3vgq7cq6z2 is used, and 
@@ -1235,7 +1235,7 @@ class DatabaseMigration {
     }
 
     // safe to make this conditional on the network since it doesn't change the database schema
-    if (databaseSchemaVersion < 109 && config.MEMPOOL.NETWORK === 'liquid') {
+    if (databaseSchemaVersion < 109 && Common.isLiquid()) {
       // hardcode current and past federation peg scripts to avoid reindexing existing instances
       await this.$executeQuery(`
           INSERT IGNORE INTO federation_peg_scripts (address, fedpegscript, timelock, blocknumber) VALUES
@@ -1380,7 +1380,7 @@ class DatabaseMigration {
     const isBitcoin = ['mainnet', 'testnet', 'signet', 'testnet4', 'regtest'].includes(config.MEMPOOL.NETWORK);
 
     if (version < 1) {
-      if (config.MEMPOOL.NETWORK !== 'liquid' && config.MEMPOOL.NETWORK !== 'liquidtestnet') {
+      if (!Common.isLiquid()) {
         if (version > 0) {
           logger.notice(`MIGRATIONS: Migrating (shifting) statistics table data`);
         }

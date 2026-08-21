@@ -73,9 +73,7 @@ import { DifficultyMiningComponent } from '@components/difficulty-mining/difficu
 import { BalanceWidgetComponent } from '@components/balance-widget/balance-widget.component';
 import { AddressTransactionsWidgetComponent } from '@components/address-transactions-widget/address-transactions-widget.component';
 import { RbfTimelineComponent } from '@components/rbf-timeline/rbf-timeline.component';
-import { AccelerationTimelineComponent } from '@components/acceleration-timeline/acceleration-timeline.component';
 import { RbfTimelineTooltipComponent } from '@components/rbf-timeline/rbf-timeline-tooltip.component';
-import { AccelerationTimelineTooltipComponent } from '@components/acceleration-timeline/acceleration-timeline-tooltip.component';
 import { PushTransactionComponent } from '@components/push-transaction/push-transaction.component';
 import { TestTransactionsComponent } from '@components/test-transactions/test-transactions.component';
 import { AssetsFeaturedComponent } from '@components/assets/assets-featured/assets-featured.component';
@@ -109,10 +107,6 @@ import { TestnetAlertComponent } from '@app/shared/components/testnet-alert/test
 import { GlobalFooterComponent } from '@app/shared/components/global-footer/global-footer.component';
 import { MempoolErrorComponent } from '@app/shared/components/mempool-error/mempool-error.component';
 import { MiningPoolComponent } from '@app/shared/components/mining-pool/mining-pool.component';
-import { AccelerationsListComponent } from '@components/acceleration/accelerations-list/accelerations-list.component';
-import { PendingStatsComponent } from '@components/acceleration/pending-stats/pending-stats.component';
-import { AccelerationStatsComponent } from '@components/acceleration/acceleration-stats/acceleration-stats.component';
-import { AccelerationSparklesComponent } from '@components/acceleration/sparkles/acceleration-sparkles.component';
 import { OrdDataComponent } from '@components/ord-data/ord-data.component';
 
 import { BlockViewComponent } from '@components/block-view/block-view.component';
@@ -200,9 +194,7 @@ import { GithubLogin } from '@components/github-login.component/github-login.com
     BalanceWidgetComponent,
     AddressTransactionsWidgetComponent,
     RbfTimelineComponent,
-    AccelerationTimelineComponent,
     RbfTimelineTooltipComponent,
-    AccelerationTimelineTooltipComponent,
     PushTransactionComponent,
     TestTransactionsComponent,
     AssetsNavComponent,
@@ -248,10 +240,6 @@ import { GithubLogin } from '@components/github-login.component/github-login.com
     OnlyVsizeDirective,
     OnlyWeightDirective,
     MempoolErrorComponent,
-    AccelerationsListComponent,
-    AccelerationStatsComponent,
-    PendingStatsComponent,
-    AccelerationSparklesComponent,
     OrdDataComponent,
     HttpErrorComponent,
     TwitterWidgetComponent,
@@ -357,9 +345,7 @@ import { GithubLogin } from '@components/github-login.component/github-login.com
     BalanceWidgetComponent,
     AddressTransactionsWidgetComponent,
     RbfTimelineComponent,
-    AccelerationTimelineComponent,
     RbfTimelineTooltipComponent,
-    AccelerationTimelineTooltipComponent,
     PushTransactionComponent,
     TestTransactionsComponent,
     AssetsNavComponent,
@@ -394,10 +380,6 @@ import { GithubLogin } from '@components/github-login.component/github-login.com
     PreviewTitleComponent,
     GlobalFooterComponent,
     MempoolErrorComponent,
-    AccelerationsListComponent,
-    AccelerationStatsComponent,
-    PendingStatsComponent,
-    AccelerationSparklesComponent,
     OrdDataComponent,
     HttpErrorComponent,
     TwitterWidgetComponent,

@@ -110,11 +110,6 @@ const routes: Routes = [
       {
         path: 'api',
         loadChildren: () => import('@app/docs/docs.module').then(m => m.DocsModule)
-      },
-      {
-        path: 'lightning',
-        loadChildren: () => import('@app/lightning/lightning.module').then(m => m.LightningModule),
-        data: { preload: browserWindowEnv && browserWindowEnv.LIGHTNING === true, networks: ['bitcoin'] },
       }
     ],
   }

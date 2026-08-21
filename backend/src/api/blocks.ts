@@ -32,7 +32,7 @@ import bitcoinSecondClient from './bitcoin/bitcoin-second-client';
 import mempoolBlocks from './mempool-blocks';
 import statistics from './statistics/statistics';
 import { calcBitsDifference } from './difficulty-adjustment';
-import AccelerationRepository from '../repositories/AccelerationRepository';
+
 import { calculateGoodBlockCpfp } from './cpfp';
 import blockProcessor, { BlockProcessingResult, detectTemplateAlgorithm, saveCpfpDataToCpfpSummary } from './block-processor';
 import mempool from './mempool';
@@ -1433,13 +1433,6 @@ class Blocks {
         await blocksRepository.$saveBlockInDatabase(blockExtended);
         this.updateTimerProgress(timer, `saved ${this.currentBlockHeight} to database`);
 
-        await AccelerationRepository.$indexAccelerationsForBlock(
-          blockExtended,
-          Object.values(accelerations),
-          cpfpSummary.transactions
-        );
-        this.updateTimerProgress(timer, `indexed accelerations for ${this.currentBlockHeight}`);
-
         if (!fastForwarded) {
           await this.$saveBlockData(processingResult, timer);
         }
@@ -1622,7 +1615,6 @@ class Blocks {
       await HashratesRepository.$deleteHashratesFromTimestamp(forkTail.timestamp - 604800);
       await DifficultyAdjustmentsRepository.$deleteAdjustementsFromHeight(forkTail.height);
       await cpfpRepository.$deleteClustersFrom(forkTail.height);
-      await AccelerationRepository.$deleteAccelerationsFrom(forkTail.height);
       this.flagValuesDeleteQueue.push(forkTail.height);
       chainTips.clearOrphanCacheAboveHeight(forkTail.height);
       this.updateTimerProgress(timer, `deleted stale block data`);

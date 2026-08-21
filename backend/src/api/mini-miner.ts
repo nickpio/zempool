@@ -1,4 +1,4 @@
-import { Acceleration } from './acceleration/acceleration';
+import { Acceleration } from '../mempool.interfaces';
 import { MempoolTransactionExtended } from '../mempool.interfaces';
 import logger from '../logger';
 
@@ -309,7 +309,7 @@ export function makeBlockTemplate(candidates: MempoolTransactionExtended[], acce
   for (const acceleration of accelerations) {
     const tx = auditPool.get(acceleration.txid);
     if (tx) {
-      tx.feeDelta = acceleration.max_bid;
+      tx.feeDelta = acceleration.feeDelta ?? acceleration.max_bid ?? 0;
       tx.feePerVsize = ((tx.fee + tx.feeDelta) / tx.adjustedVsize);
       tx.effectiveFeePerVsize = tx.feePerVsize;
       tx.dependencyRate = tx.feePerVsize;

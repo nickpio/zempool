@@ -278,15 +278,11 @@ export class WebsocketService {
   }
 
   startTrackAccelerations() {
-    this.websocketSubject.next({ 'track-accelerations': true });
-    this.isTrackingAccelerations = true;
+    this.isTrackingAccelerations = false;
   }
 
   stopTrackAccelerations() {
-    if (this.isTrackingAccelerations) {
-      this.websocketSubject.next({ 'track-accelerations': false });
-      this.isTrackingAccelerations = false;
-    }
+    this.isTrackingAccelerations = false;
   }
 
   ensureTrackAccelerations() {
@@ -503,18 +499,6 @@ export class WebsocketService {
 
     if (response['wallet-transactions']) {
       this.stateService.walletTransactions$.next(response['wallet-transactions']);
-    }
-
-    if (response['accelerations']) {
-      if (response['accelerations'].accelerations) {
-        this.stateService.accelerations$.next({
-          added: response['accelerations'].accelerations,
-          removed: [],
-          reset: true,
-        });
-      } else {
-        this.stateService.accelerations$.next(response['accelerations']);
-      }
     }
 
     if (response['live-2h-chart']) {

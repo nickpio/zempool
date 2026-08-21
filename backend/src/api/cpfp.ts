@@ -1,7 +1,7 @@
 import { Ancestor, CpfpCluster, CpfpInfo, MempoolTransactionExtended, TemplateAlgorithm, TransactionExtended } from '../mempool.interfaces';
 import { GraphTx, convertToGraphTx, expandRelativesGraph, initializeRelatives, makeBlockTemplate, mempoolComparator, removeAncestors, setAncestorScores } from './mini-miner';
 import memPool from './mempool';
-import { Acceleration } from './acceleration/acceleration';
+import { Acceleration } from '../mempool.interfaces';
 import { ClusterMempool } from '../cluster-mempool/cluster-mempool';
 
 const CPFP_UPDATE_INTERVAL = 60_000; // update CPFP info at most once per 60s per transaction
@@ -190,7 +190,7 @@ export function calculateClusterMempoolBlockCpfp(height: number, transactions: M
 
   const accelMap: { [txid: string]: { feeDelta: number } } = {};
   for (const acc of accelerations) {
-    accelMap[acc.txid] = { feeDelta: acc.max_bid };
+    accelMap[acc.txid] = { feeDelta: acc.feeDelta ?? acc.max_bid ?? 0 };
   }
 
   const cm = new ClusterMempool(txMap, accelMap, false, 25000);

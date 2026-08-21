@@ -103,24 +103,6 @@
     "GEOLITE2_ASN": "/usr/local/share/GeoIP/GeoLite2-ASN.mmdb",
     "GEOIP2_ISP": "/usr/local/share/GeoIP/GeoIP2-ISP.mmdb"
   },
-  "LIGHTNING": {
-    "ENABLED": false,
-    "BACKEND": "lnd",
-    "STATS_REFRESH_INTERVAL": 600,
-    "GRAPH_REFRESH_INTERVAL": 600,
-    "LOGGER_UPDATE_INTERVAL": 30,
-    "FORENSICS_INTERVAL": 43200,
-    "FORENSICS_RATE_LIMIT": 20
-  },
-  "LND": {
-    "TLS_CERT_PATH": "tls.cert",
-    "MACAROON_PATH": "readonly.macaroon",
-    "REST_API_URL": "https://localhost:8080",
-    "TIMEOUT": 10000
-  },
-  "CLIGHTNING": {
-    "SOCKET": "lightning-rpc"
-  },
   "SOCKS5PROXY": {
     "ENABLED": false,
     "USE_ONION": true,
@@ -154,7 +136,7 @@
     ]
   },
   "MEMPOOL_SERVICES": {
-    "API": "https://mempool.space/api/v1/services",
+    "API": "",
     "ACCELERATIONS": false
   },
   "STRATUM": {
